@@ -105,18 +105,24 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				res.send("yeah something broke.");
 			} else {
 				// write into the database
-				req.session.oauth.access_token = oauth_access_token;
-				req.session.oauth.access_token_secret = oauth_access_token_secret;
+				oauth_access_token = req.session.oauth.access_token;
+				oauth_access_token_secret = req.session.oauth.access_token_secret;
 				
-				new Person({
-					oauth_token : oauth_access_token,
-					oauth_token_secret : oauth_access_token_secret
-				}).save(function(err, person){
-					console.log(results);
-					res.send("worked. nice one.");
-					// This should redirect to the users 'page'				
+				// if they are already in the DB, then they do not need a new record
+				Person.findOne({oauth_token: oauth_access_token}, function(err, person){
+					if (person) {
+						// they already exist
+					} else {
+						new Person({
+							oauth_token : oauth_access_token,
+							oauth_token_secret : oauth_access_token_secret
+						}).save(function(err, person){
+							console.log(results);
+							res.send("worked. nice one.");
+							// This should redirect to the users 'page'				
+						});
+					}
 				});
-
 			}
 		}
 		);
