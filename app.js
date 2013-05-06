@@ -76,6 +76,11 @@ mongoose.connect(mongourl);
 
 
 // Routes
+app.get('/', functions(req, res){
+	//Display the homepage
+	
+});
+
 app.get('/auth/twitter', function(req, res){
 	oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
 		if (error) {
@@ -131,7 +136,10 @@ app.get('/auth/twitter/callback', function(req, res, next){
 });
 
 
-
+app.get('/:username', function(req, res){
+	// Display the users page
+	
+});
 
 app.listen(3000);
 console.log('Listening on port 3000');
