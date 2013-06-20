@@ -118,7 +118,7 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				oauth_access_token = req.session.oauth.access_token;
 				oauth_access_token_secret = req.session.oauth.access_token_secret;
 				
-				req.session.scrfeen_name = results.screen_name;
+				req.session.screen_name = results.screen_name;
 				valid = true;
 				
 				// if they are already in the DB, then they do not need a new record
