@@ -150,7 +150,7 @@ app.get('/auth/twitter/callback', function(req, res, next){
 
 app.get('/:username', function(req, res){
 	// Display the users page
-	if (!(req.session.screen_name) {
+	if (!req.session.screen_name) {
 		// False
 		res.send("Should not be here");
 	} else {
