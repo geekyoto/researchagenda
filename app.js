@@ -120,7 +120,9 @@ app.get('/auth/twitter/callback', function(req, res, next){
 					} else {
 						new Person({
 							oauth_token : oauth_access_token,
-							oauth_token_secret : oauth_access_token_secret
+							oauth_token_secret : oauth_access_token_secret,
+							user_id: results.user_id,
+							screen_name: results.screen_name
 						}).save(function(err, person){
 							// Needs to be written as a new account in the DB
 							
