@@ -43,7 +43,7 @@ var oa = new OAuth(
 		        "username":"",
 		        "password":"",
 		        "name":"",
-		        "db":"test"
+		        "db":"researchagenda"
 		    };
 	//  mongoose.connect('mongodb://localhost/test');
 	});
@@ -78,7 +78,7 @@ mongoose.connect(mongourl);
 // Routes
 app.get('/', function(req, res){
 	//Display the homepage
-	res.send("ok, a homepage");
+	res.send("<a href='/auth/twitter'>Sign In</a>");
 });
 
 app.get('/auth/twitter', function(req, res){
@@ -122,6 +122,8 @@ app.get('/auth/twitter/callback', function(req, res, next){
 							oauth_token : oauth_access_token,
 							oauth_token_secret : oauth_access_token_secret
 						}).save(function(err, person){
+							// Needs to be written as a new account in the DB
+							
 							console.log(results);
 							res.send("worked. nice one.");
 							// This should redirect to the users 'page'				
