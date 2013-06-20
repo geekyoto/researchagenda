@@ -77,8 +77,13 @@ mongoose.connect(mongourl);
 
 // Routes
 app.get('/', function(req, res){
-	//Display the homepage
-	res.send("<a href='/auth/twitter'>Sign In</a>");
+	// Check session if user logged in
+	if (!req.session.screen_name) {
+		//Display the homepage
+		res.send("<a href='/auth/twitter'>Sign In</a>");	
+	} else {
+		res.send("Signed In");
+	}
 });
 
 app.get('/auth/twitter', function(req, res){
@@ -113,6 +118,9 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				oauth_access_token = req.session.oauth.access_token;
 				oauth_access_token_secret = req.session.oauth.access_token_secret;
 				
+				req.session.scrfeen_name = results.screen_name;
+				valid = true;
+				
 				// if they are already in the DB, then they do not need a new record
 				Person.findOne({oauth_token: oauth_access_token}, function(err, person){
 					if (person) {
@@ -142,7 +150,13 @@ app.get('/auth/twitter/callback', function(req, res, next){
 
 app.get('/:username', function(req, res){
 	// Display the users page
-	
+	if (!(req.session.screen_name) {
+		// False
+		res.send("Should not be here");
+	} else {
+		// True
+		res.send("Greetings User!");
+	}
 });
 
 app.listen(3000);
