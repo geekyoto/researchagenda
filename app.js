@@ -76,9 +76,9 @@ mongoose.connect(mongourl);
 
 
 // Routes
-app.get('/', functions(req, res){
+app.get('/', function(req, res){
 	//Display the homepage
-	
+	res.send("ok, a homepage");
 });
 
 app.get('/auth/twitter', function(req, res){
