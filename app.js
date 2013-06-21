@@ -16,9 +16,9 @@ var OAuth = require('oauth').OAuth;
 var oa = new OAuth(
 	"https://api.twitter.com/oauth/request_token",
 	"https://api.twitter.com/oauth/access_token",
-	"84xeNkpYXgLJiceIEJJlQ",
-	"DCFHFJGXdt6LTQNH3p6cy8Kr6g03ASK2RufsLdEvJI",
-	"1.0",
+	"dNdLYtnu14xuQ3WzznCkA",
+	"S4rSTyLvny1nTGxGuCpXoJcQQvFM7HX62GdbGdN7w",
+	"1.0A",
 	"http://localhost:3000/auth/twitter/callback",
 	"HMAC-SHA1"
 	);
@@ -104,10 +104,11 @@ app.get('/auth/twitter', function(req, res){
 });
 
 app.get('/auth/twitter/callback', function(req, res, next){
+	console.log('Callback called: ');
 	if (req.session.oauth) {
 		req.session.oauth.verifier = req.query.oauth_verifier;
 		var oauth = req.session.oauth;
-
+		console.log('Inside if statement: ');
 		oa.getOAuthAccessToken(oauth.token,oauth.token_secret,oauth.verifier, 
 		function(error, oauth_access_token, oauth_access_token_secret, results){
 			if (error){
@@ -118,8 +119,8 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				oauth_access_token = req.session.oauth.access_token;
 				oauth_access_token_secret = req.session.oauth.access_token_secret;
 				
-				req.session.screen_name = results.screen_name;
-				valid = true;
+				//req.session.screen_name = results.screen_name;
+				//valid = true;
 				
 				// if they are already in the DB, then they do not need a new record
 				Person.findOne({oauth_token: oauth_access_token}, function(err, person){
@@ -128,9 +129,9 @@ app.get('/auth/twitter/callback', function(req, res, next){
 					} else {
 						new Person({
 							oauth_token : oauth_access_token,
-							oauth_token_secret : oauth_access_token_secret,
-							user_id: results.user_id,
-							screen_name: results.screen_name
+							oauth_token_secret : oauth_access_token_secret
+						//	user_id: results.user_id,
+						//	screen_name: results.screen_name
 						}).save(function(err, person){
 							// Needs to be written as a new account in the DB
 							
