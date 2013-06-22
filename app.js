@@ -9,11 +9,28 @@ var app = express();
 app.use( express.cookieParser() );
 app.use( express.session( { secret: 'whatever' } ) );
 
+
 var mongo;
 
-var OAuth = require('oauth').OAuth;
+// Use Passport
+var passport = require('passport'), TwitterStrategy = require('passport-twitter').Strategy;
 
-var oa = new OAuth(
+passport.use(new TwitterStrategy({
+	consumerKey: "dNdLYtnu14xuQ3WzznCkA",
+	consumerSecret: "S4rSTyLvny1nTGxGuCpXoJcQQvFM7HX62GdbGdN7w",
+	callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+	},
+	function(token, tokenSecret, profile, done) {
+	  // NOTE: You'll probably want to associate the Twitter profile with a
+	  //       user record in your application's DB.
+	  var user = profile;
+	  return done(null, user);
+	}
+));
+
+//var OAuth = require('oauth').OAuth;
+
+/* var oa = new OAuth(
 	"https://api.twitter.com/oauth/request_token",
 	"https://api.twitter.com/oauth/access_token",
 	"dNdLYtnu14xuQ3WzznCkA",
@@ -22,15 +39,17 @@ var oa = new OAuth(
 	"http://localhost:3000/auth/twitter/callback",
 	"HMAC-SHA1"
 	);
-
+*/
 	app.configure(function(){
 	  app.set('port', process.env.VCAP_APP_PORT || 3000);
 	  app.set('views', __dirname + '/views');
 	  app.set('view engine', 'jade');
-	  app.use(express.favicon());
+	  app.use(express.favicon());	
 	  app.use(express.logger('dev'));
 	  app.use(express.bodyParser());
 	  app.use(express.methodOverride());
+	  app.use(passport.initialize());
+	  app.use(passport.session());
 	  app.use(app.router);
 	  app.use(express.static(path.join(__dirname, 'public')));
 	});
@@ -77,15 +96,33 @@ mongoose.connect(mongourl);
 
 // Routes
 app.get('/', function(req, res){
-	// Check session if user logged in
-	if (!req.session.screen_name) {
-		//Display the homepage
-		res.send("<a href='/auth/twitter'>Sign In</a>");	
-	} else {
-		res.send("Signed In");
-	}
+
+		res.send("Homepage");
+
 });
 
+// Passport Routes for Twitter Authentication
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback', 
+	passport.authenticate('twitter', { successRedirect: '/',
+									   failureRedirect: '/login' }));
+									
+app.get('/login', function(req, res){
+	res.send("<a href='/auth/twitter'>Sign In</a>");
+})
+
+// Serialize user into session
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+// OLd OAuth Code
+/***
 app.get('/auth/twitter', function(req, res){
 	oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
 		if (error) {
@@ -119,8 +156,8 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				oauth_access_token = req.session.oauth.access_token;
 				oauth_access_token_secret = req.session.oauth.access_token_secret;
 				
-				//req.session.screen_name = results.screen_name;
-				//valid = true;
+				req.session.screen_name = 'results.screen_name';
+				valid = true;
 				
 				// if they are already in the DB, then they do not need a new record
 				Person.findOne({oauth_token: oauth_access_token}, function(err, person){
@@ -147,7 +184,7 @@ app.get('/auth/twitter/callback', function(req, res, next){
 	} else
 		next(new Error("you're not supposed to be here."))
 });
-
+***/
 
 app.get('/:username', function(req, res){
 	// Display the users page
