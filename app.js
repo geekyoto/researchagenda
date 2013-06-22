@@ -1,6 +1,7 @@
 var express = require('express'),
 	http = require('http'),
-	path = require('path');
+	path = require('path'),
+	ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 	
 var mongoose = require('mongoose');	
 var db = require('./db');
@@ -8,7 +9,6 @@ var db = require('./db');
 var app = express();
 app.use( express.cookieParser() );
 app.use( express.session( { secret: 'whatever' } ) );
-
 
 var mongo;
 
@@ -186,15 +186,8 @@ app.get('/auth/twitter/callback', function(req, res, next){
 });
 ***/
 
-app.get('/:username', function(req, res){
-	// Display the users page
-	if (!req.session.screen_name) {
-		// False
-		res.send("Should not be here");
-	} else {
-		// True
-		res.send("Greetings User!");
-	}
+app.get('/:username', ensureLoggedIn('/login'), function(req, res){
+	res.send("Greetings " + req.user.username);
 });
 
 app.listen(3000);
