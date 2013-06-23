@@ -24,6 +24,21 @@ passport.use(new TwitterStrategy({
 	  // NOTE: You'll probably want to associate the Twitter profile with a
 	  //       user record in your application's DB.
 	  var user = profile;
+	  console.log(user);
+	
+	  Person.findOne({username: user.username}, function(err, person){
+			if (person) {
+				// they already exist
+			} else {
+				new Person({
+					username : user.username
+				}).save(function(err, person){
+					// Needs to be written as a new account in the DB
+			
+				});
+			}
+		});
+	
 	  return done(null, user);
 	}
 ));
