@@ -9,4 +9,11 @@ var peopleSchema = new mongoose.Schema({
 	username: String
 });
 
+var postingSchema = new mongoose.Schema({
+	username: String,
+	title: String,
+	body: String
+});
+
 mongoose.model('Person', peopleSchema);
+mongoose.model('Posting', postingSchema);
