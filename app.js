@@ -113,6 +113,12 @@ mongoose.connect(mongourl);
 // Routes
 app.get('/', function(req, res){
 
+	// Get the latest 5 postings
+	var q = Posting.find().limit(5);
+	q.execFind(function(err, posts) {
+		console.log(posts);
+	});
+	
 	// If the user is signed in then display a create post form
 	if (req.user) {
 		res.send("<form action='/createPost' method='post'><p>Title: <input type='text' name='title' /><br><p>Body: <textarea name='posting'></textarea><p><input type='submit'></form>");
@@ -154,7 +160,7 @@ app.post('/createPost', function(req, res){
 		title: req.body.title, 
 		body: req.body.posting  
 	}).save( function (err, posting, count) {
-		console.log('Post Record created');
+		console.log('Post Record cr` eated');
 		console.log('Posting ID: '+posting._id);
 		
 		res.redirect('/');
