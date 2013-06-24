@@ -101,6 +101,7 @@ passport.use(new TwitterStrategy({
 
 
 var Person = mongoose.model('Person');
+var Posting = mongoose.model('Posting');
 var mongourl = generate_mongo_url(mongo);
 
 console.log('MongoURL: ' + mongourl);
@@ -112,8 +113,18 @@ mongoose.connect(mongourl);
 // Routes
 app.get('/', function(req, res){
 
+	// Get the latest 5 postings
+	var q = Posting.find().limit(5);
+	q.execFind(function(err, posts) {
+		console.log(posts);
+	});
+	
+	// If the user is signed in then display a create post form
+	if (req.user) {
+		res.send("<form action='/createPost' method='post'><p>Title: <input type='text' name='title' /><br><p>Body: <textarea name='posting'></textarea><p><input type='submit'></form>");
+	} else {
 		res.send("Homepage");
-
+	};
 });
 
 // Passport Routes for Twitter Authentication
@@ -136,70 +147,6 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-// OLd OAuth Code
-/***
-app.get('/auth/twitter', function(req, res){
-	oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
-		if (error) {
-			console.log(error);
-			res.send("yeah no. didn't work.")
-		}
-		else {
-			req.session.oauth = {};
-			req.session.oauth.token = oauth_token;
-			console.log('oauth.token: ' + req.session.oauth.token);
-			req.session.oauth.token_secret = oauth_token_secret;
-			console.log('oauth.token_secret: ' + req.session.oauth.token_secret);
-			res.redirect('https://twitter.com/oauth/authenticate?oauth_token='+oauth_token)
-	}
-	});
-});
-
-app.get('/auth/twitter/callback', function(req, res, next){
-	console.log('Callback called: ');
-	if (req.session.oauth) {
-		req.session.oauth.verifier = req.query.oauth_verifier;
-		var oauth = req.session.oauth;
-		console.log('Inside if statement: ');
-		oa.getOAuthAccessToken(oauth.token,oauth.token_secret,oauth.verifier, 
-		function(error, oauth_access_token, oauth_access_token_secret, results){
-			if (error){
-				console.log(error);
-				res.send("yeah something broke.");
-			} else {
-				// write into the database
-				oauth_access_token = req.session.oauth.access_token;
-				oauth_access_token_secret = req.session.oauth.access_token_secret;
-				
-				req.session.screen_name = 'results.screen_name';
-				valid = true;
-				
-				// if they are already in the DB, then they do not need a new record
-				Person.findOne({oauth_token: oauth_access_token}, function(err, person){
-					if (person) {
-						// they already exist
-					} else {
-						new Person({
-							oauth_token : oauth_access_token,
-							oauth_token_secret : oauth_access_token_secret
-						//	user_id: results.user_id,
-						//	screen_name: results.screen_name
-						}).save(function(err, person){
-							// Needs to be written as a new account in the DB
-							
-							console.log(results);
-							res.send("worked. nice one.");
-							// This should redirect to the users 'page'				
-						});
-					}
-				});
-			}
-		}
-		);
-	} else
-		next(new Error("you're not supposed to be here."))
-});
-***/
 
 app.get('/:username', ensureLoggedIn('/login'), function(req, res){
 	console.log(req.params.username);
@@ -208,6 +155,21 @@ app.get('/:username', ensureLoggedIn('/login'), function(req, res){
 	} else {
 		res.send("This is " + req.params.username + "'s page.");
 	}
+});
+
+app.post('/createPost', function(req, res){
+	// Submitted a new post
+	console.log('Creating Post record in the database');
+	new Posting ({
+		username: req.user.username,
+		title: req.body.title, 
+		body: req.body.posting  
+	}).save( function (err, posting, count) {
+		console.log('Post Record cr` eated');
+		console.log('Posting ID: '+posting._id);
+		
+		res.redirect('/');
+	});
 });
 
 app.listen(3000);
