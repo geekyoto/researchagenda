@@ -121,9 +121,9 @@ app.get('/', function(req, res){
 	
 	// If the user is signed in then display a create post form
 	if (req.user) {
-		res.send("<form action='/createPost' method='post'><p>Title: <input type='text' name='title' /><br><p>Body: <textarea name='posting'></textarea><p><input type='submit'></form>");
+		res.render('index', { title: 'researchAgenda' });
 	} else {
-		res.send("Homepage");
+		res.render('index', { title: 'researchAgenda' });
 	};
 });
 
@@ -170,6 +170,11 @@ app.post('/createPost', function(req, res){
 		
 		res.redirect('/');
 	});
+});
+
+app.get('/about', function(req, res){
+	//Display about page
+	res.render('about', { title: 'researchAgenda' }); 
 });
 
 app.listen(3000);
