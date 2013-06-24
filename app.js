@@ -202,7 +202,12 @@ app.get('/auth/twitter/callback', function(req, res, next){
 ***/
 
 app.get('/:username', ensureLoggedIn('/login'), function(req, res){
-	res.send("Greetings " + req.user.username);
+	console.log(req.params.username);
+	if (req.params.username == req.user.username) {
+		res.send("Hi, " + req.user.username + " this is your page!");
+	} else {
+		res.send("This is " + req.params.username + "'s page.");
+	}
 });
 
 app.listen(3000);
