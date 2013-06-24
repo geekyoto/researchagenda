@@ -1,0 +1,47 @@
+!!!
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+  body
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.navbar-inner
+        div.container
+          a.brand #{title}
+          ul.nav
+            li.active
+              a(href='/') home
+            li
+              a(href='/about') about
+            li
+              a(href='mailto:info@researchagenda.org') contact
+    div.container
+      div.hero-unit
+        h1 crowdsource initial research
+        p Set your interests and initial questions and ask your friends, contacts and others to contribute ideas through which to develop your questions. 
+      div.row
+        div.span6
+          h2 Add a new post
+
+          form(method='post', action='/createPost')
+            div.control-group
+              label.control-label Posting Title:
+               div.controls
+                 input(name='title')
+
+            div.control-group
+              label.control-label Post body:
+                div.controls
+                  textarea.span5(name='posting', rows=7, cols=35)
+
+            div.control-group
+              div.controls
+                input(type='submit', value='Submit Message')
+
+        div.span6
+          h2 latest postings
+          p
+  footer
+    p &copy; This Is Our Algorithm 2013
+
+
