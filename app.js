@@ -148,7 +148,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-app.get('/:username', ensureLoggedIn('/login'), function(req, res){
+app.get('/user/:username', ensureLoggedIn('/login'), function(req, res){
 	console.log(req.params.username);
 	if (req.params.username == req.user.username) {
 		res.send("Hi, " + req.user.username + " this is your page!");
@@ -172,5 +172,20 @@ app.post('/createPost', function(req, res){
 	});
 });
 
+
+app.get('/list', function(req, res){
+	// Just a page to list the DB postings
+	// Probably wont stay
+	
+	// Get the latest 5 postings
+	var q = Posting.find().limit(5);
+	q.execFind(function(err, posts) {
+		console.log(posts);
+		
+		// Now we pass on posts to the template to work through it
+		res.render('list', { title: 'researchAgenda', posts: posts});
+		
+	});
+})
 app.listen(3000);
 console.log('Listening on port 3000');
