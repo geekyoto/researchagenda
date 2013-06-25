@@ -7,6 +7,5 @@
   "express": "3.x",
   "oauth": "*",
   "mongoose": "*",
-  "jade": "*"
  }
 }
