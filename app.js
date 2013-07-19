@@ -117,14 +117,15 @@ app.get('/', function(req, res){
 	var q = Posting.find().limit(5);
 	q.execFind(function(err, posts) {
 		console.log(posts);
+		
+		// If the user is signed in then display a create post form
+		if (req.user) {
+			res.render('index', { title: 'researchAgenda', posts: posts });
+		} else {
+			res.render('index_unauth', { title: 'researchAgenda', posts: posts });
+		};
 	});
-	
-	// If the user is signed in then display a create post form
-	if (req.user) {
-		res.render('index', { title: 'researchAgenda' });
-	} else {
-		res.render('index', { title: 'researchAgenda' });
-	};
+
 });
 
 // Passport Routes for Twitter Authentication
