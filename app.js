@@ -131,10 +131,13 @@ app.get('/', function(req, res){
 // Passport Routes for Twitter Authentication
 app.get('/auth/twitter', passport.authenticate('twitter'));
 
+// The Twitter Callback
 app.get('/auth/twitter/callback', 
 	passport.authenticate('twitter', { successRedirect: '/',
 									   failureRedirect: '/login' }));
-									
+
+// This function should probably go
+// have added links directly to /auth/twitter to the topbar									
 app.get('/login', function(req, res){
 	res.send("<a href='/auth/twitter'>Sign In</a>");
 })
@@ -148,12 +151,14 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-
+// View a user profile
 app.get('/user/:username', ensureLoggedIn('/auth/twitter'), function(req, res){
 	console.log(req.params.username);
 	if (req.params.username == req.user.username) {
+		// A signed in user profile page
 		res.send("Hi, " + req.user.username + " this is your page!");
 	} else {
+		// Another users page
 		res.send("This is " + req.params.username + "'s page.");
 	}
 });
@@ -193,7 +198,25 @@ app.get('/list', function(req, res){
 		res.render('list', { title: 'researchAgenda', posts: posts});
 		
 	});
-})
+});
+
+app.post('/upvote/:id', function(req, res){
+	// Increase the vote for an idea from a user
+	//  * Check that the user is signed in
+	//  * Increase the +ve vote count for the idea record
+	//  * Add entry to the user record that they have voted for the idea
+	
+});
+
+app.post('/downvotevote/:id', function(req, res){
+	// Decrease the vote for an idea from a user
+	//  * Check that the user is signed in
+	//  * Decrease the +ve vote count for the idea record
+	//  * Add entry to the user record that they have removed their vote for the idea
+	
+});
+
+
 
 app.listen(3000);
 console.log('Listening on port 3000');
