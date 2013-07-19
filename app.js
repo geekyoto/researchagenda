@@ -30,6 +30,10 @@ passport.use(new TwitterStrategy({
 			if (person) {
 				// they already exist
 				// update last signed in date
+				Person.findOneAndUpdate({username: user.username}, {last_sign_in: Date.now()}, function(err, Person) {
+					if (err) return handleError(err);
+					console.log('Updated Person Record: ' + Person);
+				});
 			} else {
 				new Person({
 					username : user.username
