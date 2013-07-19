@@ -156,6 +156,16 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+app.get('/user/', function(req, res){
+	// Is the user signed in?
+	if (req.user) {
+		// Yes the user is signed in, redirect them to their profile page
+		res.redirect('/user/' + req.user.username);
+	} else {
+		res.redirect('/');
+	}; 
+})
+
 // View a user profile
 app.get('/user/:username', ensureLoggedIn('/auth/twitter'), function(req, res){
 	console.log(req.params.username);
