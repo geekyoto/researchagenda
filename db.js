@@ -6,7 +6,8 @@ var researchSchema = new mongoose.Schema({
 mongoose.model('Research', researchSchema);
 
 var peopleSchema = new mongoose.Schema({
-	username: String
+	username: String,
+	last_sign_in: Date
 });
 
 var postingSchema = new mongoose.Schema({
