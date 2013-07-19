@@ -149,7 +149,7 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-app.get('/user/:username', ensureLoggedIn('/login'), function(req, res){
+app.get('/user/:username', ensureLoggedIn('/auth/twitter'), function(req, res){
 	console.log(req.params.username);
 	if (req.params.username == req.user.username) {
 		res.send("Hi, " + req.user.username + " this is your page!");
