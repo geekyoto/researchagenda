@@ -228,12 +228,24 @@ app.post('/upvote/:id', function(req, res){
 	
 });
 
-app.post('/downvotevote/:id', function(req, res){
+app.post('/downvote/:id', function(req, res){
 	// Decrease the vote for an idea from a user
 	//  * Check that the user is signed in
 	//  * Decrease the +ve vote count for the idea record
 	//  * Add entry to the user record that they have removed their vote for the idea
 	
+});
+
+app.post('/addref/:id', function(req, res){
+	// Add a reference to an idea.
+	// A reference can be:
+	//   A URL
+	//   A Journal / Article / Book
+	
+});
+
+app.post('/addcomment/:id', function(req, res){
+	// Add a comment to an idea
 });
 
 
