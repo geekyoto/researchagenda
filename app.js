@@ -193,6 +193,11 @@ app.post('/createPost', function(req, res){
 	});
 });
 
+app.get('/ideas/:id', function(req, res){
+	// Display a page for an idea
+	
+});
+
 app.get('/about', function(req, res){
 	//Display about page
 	res.render('about', { title: 'researchAgenda' }); 
