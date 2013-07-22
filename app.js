@@ -167,7 +167,7 @@ app.get('/user/', function(req, res){
 })
 
 // View a user profile
-app.get('/user/:username', ensureLoggedIn('/auth/twitter'), function(req, res){
+app.get('/user/:username', function(req, res){
 	console.log(req.params.username);
 	if (req.params.username == req.user.username) {
 		// A signed in user profile page
@@ -244,8 +244,9 @@ app.post('/addref/:id', function(req, res){
 	
 });
 
-app.post('/addcomment/:id', function(req, res){
+app.post('/addcomment/:id', ensureLoggedIn('/auth/twitter'), function(req, res){
 	// Add a comment to an idea
+	// You have to be signed in on Twitter
 });
 
 

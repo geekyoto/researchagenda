@@ -7,6 +7,8 @@
   "express": "3.x",
   "oauth": "*",
   "mongoose": "*",
-  "jade": "*"
+  "jade": "*",
+  "passport": "*",
+  "passport-twitter": "*"
  }
 }
