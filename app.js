@@ -195,7 +195,12 @@ app.post('/createPost', function(req, res){
 
 app.get('/ideas/:id', function(req, res){
 	// Display a page for an idea
-	
+	Posting.findOne({'_id': req.params.id}, 'posting', function(err, posting) {
+		if (err) return handleError(err);
+		
+		// Should have returned the document for that id
+		res.render('idea', {title: 'reasearchAgenda' });
+	}); 
 });
 
 app.get('/about', function(req, res){

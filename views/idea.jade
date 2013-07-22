@@ -1,0 +1,25 @@
+!!!
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+  body
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.navbar-inner
+        div.container
+          a.brand #{title}
+          ul.nav
+            li.active
+              a(href='/') home
+            li
+              a(href='/about') about
+            li
+              a(href='mailto:info@researchagenda.org') contact
+            li
+              a(href='#') Sign Out
+    div.container
+    p This is an idea page
+  footer
+    p &copy; This Is Our Algorithm 2013
+
+
