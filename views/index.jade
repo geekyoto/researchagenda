@@ -16,7 +16,9 @@ html
             li
               a(href='mailto:info@researchagenda.org') contact
             li
-              a(href='/logout') Sign Out
+              img(src=user._json.profile_image_url)
+            li
+              a(href='/logout') #{user.username}
     div.container
       div.hero-unit
         h1 crowdsource initial research

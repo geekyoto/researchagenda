@@ -26,6 +26,7 @@ passport.use(new TwitterStrategy({
 	  var user = profile;
 	  console.log(user);
 	
+	  console.log(user._json.profile_image_url);
 	  Person.findOne({username: user.username}, function(err, person){
 			if (person) {
 				// they already exist
@@ -125,7 +126,8 @@ app.get('/', function(req, res){
 		
 		// If the user is signed in then display a create post form
 		if (req.user) {
-			res.render('index', { title: 'researchAgenda', posts: posts });
+			console.log('The User: ' + req.user);
+			res.render('index', { title: 'researchAgenda', posts: posts, user: req.user });
 		} else {
 			res.render('index_unauth', { title: 'researchAgenda', posts: posts });
 		};
