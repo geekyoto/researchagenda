@@ -108,6 +108,7 @@ passport.use(new TwitterStrategy({
 
 var Person = mongoose.model('Person');
 var Posting = mongoose.model('Posting');
+var Comment = mongoose.model('Comment');
 var mongourl = generate_mongo_url(mongo);
 
 console.log('MongoURL: ' + mongourl);
@@ -251,7 +252,7 @@ app.post('/addref/:id', function(req, res){
 	
 });
 
-app.post('/addcomment/:id', ensureLoggedIn('/auth/twitter'), function(req, res){
+app.post('/addcomment/', ensureLoggedIn('/auth/twitter'), function(req, res){
 	// Add a comment to an idea
 	// You have to be signed in on Twitter
 });

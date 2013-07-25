@@ -16,5 +16,12 @@ var postingSchema = new mongoose.Schema({
 	body: String
 });
 
+var commentsSchema = new mongoose.Schema({
+	username: String,
+	idea_id: String,
+	comment_text: String
+});
+
 mongoose.model('Person', peopleSchema);
 mongoose.model('Posting', postingSchema);
+mongoose.model('Comment', commentSchema);
