@@ -195,11 +195,11 @@ app.post('/createPost', function(req, res){
 
 app.get('/ideas/:id', function(req, res){
 	// Display a page for an idea
-	Posting.findOne({'_id': req.params.id}, 'posting', function(err, posting) {
+	Posting.findOne({'_id': req.params.id}, function(err, posting) {
 		if (err) return handleError(err);
-		
+		console.log('Returned Idea Post: ' + posting);
 		// Should have returned the document for that id
-		res.render('idea', {title: 'reasearchAgenda' });
+		res.render('idea', {title: 'reasearchAgenda', idea: posting });
 	}); 
 });
 
@@ -254,7 +254,10 @@ app.post('/addcomment/:id', ensureLoggedIn('/auth/twitter'), function(req, res){
 	// You have to be signed in on Twitter
 });
 
-
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/');
+});
 
 app.listen(3000);
 console.log('Listening on port 3000');
