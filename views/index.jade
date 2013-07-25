@@ -41,11 +41,10 @@ html
                 input(type='submit', value='Submit Message')
 
         div.span6
-        h2 Posts:
-
-        - posts.forEach(function(element){
-        include post_list
-        - })
+          h2 Posts:
+            - posts.forEach(function(element){
+            include post_list
+            - })
 
   footer
     p &copy; This Is Our Algorithm 2013
